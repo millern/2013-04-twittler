@@ -3,24 +3,81 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="moment.min.js"></script>
   </head>
   <body>
+
+
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
+        $body.html(createBaseHTML());
+        var $tweetContainer = $('.tweetContainer');
+        $tweetContainer.html(loadTweets());
+        createEventListeners();
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
 
       });
+
+ 
+
+      function createBaseHTML() {
+        var htmlString = "";
+        var refreshButton = '<p><a class="refreshButton" href=\"#\">Refresh Feed</a></p>';
+        var tweetContainer = '<div class="tweetContainer"></div>';
+        htmlString += refreshButton;
+        htmlString += tweetContainer;
+
+        return htmlString;
+      }
+
+      function loadTweets(){
+          var $tweetContainer = $('.tweetContainer');
+          $tweetContainer.html('');
+          var index = streams.home.length - 1;
+        while(index >= 0){
+          var tweet = streams.home[index];
+          var $tweet = $('<div class="tweet"></div>');
+          $tweet.html(tweet.message+ '</br>' +'<a href=\"#'+tweet.user+'\" class="profileLink">@' + tweet.user + '</a> ' + ' -- ' + moment(tweet.created_at).fromNow());
+          $tweet.appendTo($tweetContainer);
+          index -= 1;
+        }
+        createEventListeners();
+      }
+
+      function loadUserProfile(user) {
+        var $user = user.substring(1);
+        var $tweetContainer = $('.tweetContainer');
+        $tweetContainer.html('<p><a href=\"#\" class="refreshProfile">Refresh Tweets</a></p>');
+        var index = streams.users[$user].length - 1;
+        while(index >= 0){
+          var tweet = streams.users[$user][index];
+          var $tweet = $('<div class="tweet"></div>');
+          $tweet.html('<span class=\"message\">'+tweet.message+'</span>' + '</br>' +'<a href=\"#'+tweet.user+'\" class="profileLink">@' + tweet.user + '</a> ' + ' -- created at: ' + moment(tweet.created_at).fromNow());
+          $tweet.appendTo($tweetContainer);
+          index -= 1;
+        }
+        createEventListeners();
+      }
+      function createEventListeners() {
+        $(".refreshButton").on("click",function(event){
+          event.preventDefault();
+          loadTweets();
+        
+        });
+        $(".profileLink").on("click",function(event){
+          event.preventDefault();
+           $user = $(this).text();
+          loadUserProfile($user);
+        });
+        $(".refreshProfile").on("click",function(event){
+          event.preventDefault();
+          $user = $(this).closest(".tweetContainer").find(".tweet").find(".profileLink").first().text();
+          loadUserProfile($user);
+        });
+      }
 
     </script>
   </body>

@@ -1,0 +1,15 @@
+.tweet {
+	border: 1px solid #999;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	float:left;
+	clear:left;
+	width: 400px;
+	background: #;
+	padding: 5px;
+	margin-top: 5px;
+
+}
+.tweetContainer {
+	margin: 0 auto;	
+}
