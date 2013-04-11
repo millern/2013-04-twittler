@@ -25,12 +25,12 @@
 
       function createBaseHTML() {
         var htmlString = "";
-        var refreshButton = '<p><a class="refreshButton" href=\"#\">Refresh Feed</a></p>';
+        var refreshButton = '<a class="refreshButton button" href=\"#\">Refresh Feed</a>';
         var tweetContainer = '<div class="tweetContainer"></div>';
         htmlString += refreshButton;
         htmlString += tweetContainer;
 
-        return htmlString;
+        return '<div id=\"content\">'+htmlString+'</div>';
       }
 
       function loadTweets(){
@@ -50,7 +50,7 @@
       function loadUserProfile(user) {
         var $user = user.substring(1);
         var $tweetContainer = $('.tweetContainer');
-        $tweetContainer.html('<p><a href=\"#\" class="refreshProfile">Refresh Tweets</a></p>');
+        $tweetContainer.html('<a href=\"#\" class="refreshProfile button">Refresh User Tweets</a>');
         var index = streams.users[$user].length - 1;
         while(index >= 0){
           var tweet = streams.users[$user][index];
